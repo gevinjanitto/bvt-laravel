@@ -1,0 +1,35 @@
+{
+  "summary": "Full backend + UI testing of Laravel Bali Vision Tour app at http://localhost:3000. Backend pytest suite: 41/41 passed (public pages, filter query strings, /booking, /newsletter, admin login/wrong-pw/unauth redirect, all admin pages 200, admin tour CRUD, settings update+restore, content save no-op, preferences, upload, logout). UI (Playwright) verified: booking dialog opens & POSTs /booking -> 201 {ok:true,id}, newsletter footer POST /newsletter -> 200 {ok:true}, admin login redirect to /admin works, wrong-password shows 'Invalid username or password', all admin pages render (bookings, settings, content, account, cars, activities, articles, tours/create, tours/{id}/edit), create tour via UI (title 'QA UI Tour' + price on 'Pricing & Media' tab) succeeds and appears on public /tour-packages, delete via UI removes it (DB count verified = 0), logout form returns to /admin/login. No JS console errors captured.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "PUT /admin/settings", "issue": "If a settings payload omits the entire brand/contact/social groups, PHP formerly emitted 'Undefined array key' (log line 289). Current code uses `?? []` so is safe with empty groups but validation still requires contact.whatsapp/contact.email/brand.name/brand.title/brand.logoMode; forms must always submit them all — flag: consider defaulting missing groups more defensively."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_laravel_bvt.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "AdminController::updateSettings validation requires brand.name/title/logoMode + contact.whatsapp/email — any client sending a partial payload gets 422; acceptable for admin form which renders all fields, but if any programmatic PUT is planned, add defaults.",
+    "SiteController::booking accepts arbitrary 'type' and 'item_name' strings without cross-check against real records — low risk for a WhatsApp-driven flow but flag for future authz/lookup.",
+    "Booking dialog client-side requires `date` before POST (line 42, booking-dialog.blade.php); test must set date. Fine.",
+    "Storage of settings/blocks in DB via Setting::updateOrCreate — cached via `site()`? Not verified; changes propagate immediately on the / homepage (verified with brand rename test)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_laravel_bvt.py"
+  ],
+  "success_rate": {"backend": "100% (41/41)", "frontend": "100% (all critical UI flows verified)"},
+  "test_credentials": "admin / admin12345 (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "Newsletter subscribers: qa_test@example.com, qa_ui@example.com. Bookings: 3 test bookings via /booking. All are non-destructive.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend fully green. Booking dialog requires clicking [data-testid=book-tour-btn] then filling booking-name/booking-phone/booking-date and clicking booking-submit. Admin resource create modal has tabs: switch via [data-testid=tab-pricing-media] to reach price field. Admin form submit button texts: 'Create Tour Package', 'Simpan', etc. Use JS click to avoid drawer viewport issues in Playwright.",
+  "rca of the issue": "N/A — no unresolved issues."
+}
