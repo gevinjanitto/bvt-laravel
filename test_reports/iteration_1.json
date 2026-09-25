@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "summary": "Full backend + UI testing of Laravel Bali Vision Tour app at http://localhost:3000. Backend pytest suite: 41/41 passed (public pages, filter query strings, /booking, /newsletter, admin login/wrong-pw/unauth redirect, all admin pages 200, admin tour CRUD, settings update+restore, content save no-op, preferences, upload, logout). UI (Playwright) verified: booking dialog opens & POSTs /booking -> 201 {ok:true,id}, newsletter footer POST /newsletter -> 200 {ok:true}, admin login redirect to /admin works, wrong-password shows 'Invalid username or password', all admin pages render (bookings, settings, content, account, cars, activities, articles, tours/create, tours/{id}/edit), create tour via UI (title 'QA UI Tour' + price on 'Pricing & Media' tab) succeeds and appears on public /tour-packages, delete via UI removes it (DB count verified = 0), logout form returns to /admin/login. No JS console errors captured.",
   "backend_issues": {
     "critical": [],
@@ -33,42 +32,4 @@
   "main_agent_can_self_test": true,
   "context_for_next_testing_agent": "Backend fully green. Booking dialog requires clicking [data-testid=book-tour-btn] then filling booking-name/booking-phone/booking-date and clicking booking-submit. Admin resource create modal has tabs: switch via [data-testid=tab-pricing-media] to reach price field. Admin form submit button texts: 'Create Tour Package', 'Simpan', etc. Use JS click to avoid drawer viewport issues in Playwright.",
   "rca of the issue": "N/A — no unresolved issues."
-=======
-  "summary": "Tested Laravel Bali Vision Tour app end-to-end. Backend pytest suite (29 tests) at /app/backend/tests/backend_test.py covers all public pages, booking/newsletter POST, admin auth (right/wrong password + unauth redirect), admin resource CRUD, bookings status/delete, settings, content reset, and image upload — all 29 pass. Frontend Playwright verified: homepage renders (hero/navbar/footer/tour cards), newsletter submits with toast, hero search navigates, tour detail booking dialog opens and POST /booking returns 201 with toast, activity and car card book buttons open the shared booking dialog, admin login (wrong pass shows login-error, correct login redirects to /admin), admin pages (bookings, settings, content, tours) all render with expected data-testids.",
-  "backend_issues": {
-    "critical": [
-      {"endpoint": "POST /admin/tours (and cars/activities/articles)", "issue": "ResourceController::payload() explicitly writes null for optional text/number fields (price_unit, badge, image, subtitle, etc.) which triggers SQLSTATE 23000 'Column X cannot be null' when the admin form is saved without those fields, even though the migrations declare DB-level defaults. Reproduced: create tour with only title+price+category returns HTTP 500 (see /app/laravel/storage/logs/laravel.log). Fix: in payload() skip keys whose $data value is null so the DB defaults apply, OR read defaults from config/resources.php for default/text/lines/json field types (currently only 'number' has defaults). Impacts any admin user who leaves optional fields blank.", "priority": "HIGH"}
-    ],
-    "minor": []
-  },
-  "frontend_issues": {
-    "ui_bugs": [
-      {"component": "car card / activity card book buttons", "issue": "Buttons use data-testid='car-book-{slug}' and 'activity-book-{slug}', not the documented 'book-car-btn' / 'book-activity-btn'. They function correctly (dialog opens) but naming diverges from the review spec — either update the spec or add alias testids for automation.", "selector": "[data-testid^=car-book-], [data-testid^=activity-book-]", "priority": "LOW"}
-    ],
-    "integration_issues": [],
-    "design_issues": [
-      {"screen": "Global (all pages)", "issues": ["Tailwind Play CDN warning in console ('cdn.tailwindcss.com should not be used in production') — acceptable for MVP but should switch to compiled Tailwind for prod.", "Lucide icons for 'instagram', 'facebook', 'youtube' not found in the loaded icon set (console warnings on every page); social icons in footer render as blanks."]}
-    ]
-  },
-  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
-  "action_items": [
-    "Fix ResourceController::payload() so it doesn't submit NULL for text fields with DB defaults (price_unit, badge, image, etc.) — otherwise creating/editing any tour/car/activity/article without filling every optional field returns 500.",
-    "Register or import the missing Lucide icons (instagram, facebook, youtube) so footer social icons render.",
-    "Optional: add data-testid='book-car-btn'/'book-activity-btn' aliases to match the review spec, or update spec to the actual per-slug testids.",
-    "Environment note: during this run the container was restarted mid-test — MariaDB lost the bvt user/DB and Laravel storage was reset. Testing agent recreated user 'bvt'@'localhost'/'127.0.0.1'/'%', ran php artisan migrate --force and db:seed --force to restore 9 tours / 6 cars / 9 activities / 7 articles. Main agent should verify the seeder + migrations are idempotent across container restarts and possibly persist MariaDB grants via a startup script."
-  ],
-  "critical_code_review_comments": [
-    "ResourceController.php line 104: `$data[$key] = ($val === '' ? null : $val);` unconditionally writes null for blank text inputs; this ignores DB column defaults and breaks CRUD when optional fields are empty.",
-    "SiteController::booking() has no rate limiting — anyone can spam the endpoint (only CSRF-token gated). Consider throttle middleware.",
-    "Booking dialog accepts date via native <input type=date> which is fine, but there is no server-side check that date >= today (only client `min` attribute)."
-  ],
-  "updated_files": ["/app/backend/tests/backend_test.py"],
-  "success_rate": {"backend": "100% (29/29)", "frontend": "100% for verified flows"},
-  "test_credentials": "admin / BaliVision2025! at /admin/login (restored after re-seed).",
-  "seed_data_creation": "Recreated MySQL user 'bvt' (host localhost/127.0.0.1/%) with pass bvt_secret_2026 after container restart wiped auth, then ran `php artisan migrate --force && php artisan db:seed --force` in /app/laravel to restore all seed data. Test data (TEST_% rows in tours/bookings/newsletter_subscribers) cleaned up post-run.",
-  "retest_needed": true,
-  "main_agent_can_self_test": true,
-  "context_for_next_testing_agent": "Backend suite at /app/backend/tests/backend_test.py runs with `REACT_APP_BACKEND_URL=... python -m pytest backend/tests/backend_test.py -o addopts=''` (must override -n from pytest.ini). All 29 pass on a healthy env. Public URL: https://bali-vision-tour-1.preview.emergentagent.com. If tests return HTTP 500 on admin create/update, verify the ResourceController payload fix landed; if pages 404 or DB empty, check `supervisorctl status mariadb laravel` and re-run migrate+seed. Tour/car/activity/article book flows use per-slug testids (car-book-{slug}, activity-book-{slug}) rather than the generic book-car-btn/book-activity-btn from the spec.",
-  "rca of the issue": "Bug RCA — Admin CRUD 500 on optional-field submit: ResourceController.php's payload() default branch (line ~104) converts empty strings to null and writes them into `$data`. When the resulting associative array is passed to Model::create() / $item->update(), Eloquent generates an INSERT/UPDATE that includes every filled attribute with an explicit `?` bind — including nulls. Since columns like `price_unit` (varchar(20) NOT NULL DEFAULT 'Person'), `badge`, `image`, `subtitle`, `original_price` are NOT NULL at the DB level, MySQL rejects the write with SQLSTATE 23000. Reproduction: log in as admin, go to /admin/tours/create, fill only title + price + category + days, submit -> HTTP 500. Mitigation: in payload(), for text/lines/json/default field types, either (a) unset the key when value is null so the DB default is used, or (b) look up a per-field default from config/resources.php and substitute it, similar to the 'number' branch that already handles days/rating/reviews/price."
->>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
 }

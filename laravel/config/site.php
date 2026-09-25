@@ -22,10 +22,7 @@ return [
         'address' => 'Denpasar, Bali, Indonesia', 'addressLink' => '', 'whatsappMessage' => 'Halo Bali Vision Tour! Saya ingin bertanya tentang layanan Anda.',
     ],
     'social' => ['instagram' => '', 'facebook' => '', 'youtube' => '', 'tiktok' => ''],
-<<<<<<< HEAD
     'texts' => [],
-=======
->>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
     'brand' => ['name' => 'Bali Vision Tour', 'title' => 'Bali Vision', 'tagline' => 'TOUR & TRAVEL', 'legal' => 'PT. Bali Vision Tour', 'logo' => '/logo-icon.png', 'logoLight' => '', 'logoMode' => 'icon', 'favicon' => '/logo-icon.png'],
     'blocks' => [
         'images' => $images,

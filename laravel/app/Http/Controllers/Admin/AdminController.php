@@ -9,10 +9,7 @@ use App\Models\Booking;
 use App\Models\Car;
 use App\Models\Setting;
 use App\Models\Tour;
-<<<<<<< HEAD
 use App\Support\CmsText;
-=======
->>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -49,22 +46,14 @@ class AdminController extends Controller
     {
         $data = $r->validate(['status' => 'required|in:' . implode(',', Booking::STATUSES)]);
         $booking->update($data);
-<<<<<<< HEAD
         if ($r->wantsJson()) return response()->json(['ok' => true, 'status' => $booking->status]);
         return back()->with('status', 'Status updated');
-=======
-        return back()->with('status', 'Booking status updated.');
->>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
     }
 
     public function destroyBooking(Booking $booking)
     {
         $booking->delete();
-<<<<<<< HEAD
         return back()->with('status', 'Booking deleted');
-=======
-        return back()->with('status', 'Booking deleted.');
->>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
     }
 
     public function settings()
@@ -86,35 +75,23 @@ class AdminController extends Controller
         if (!preg_match('/^[1-9]\d{7,14}$/', $wa)) throw ValidationException::withMessages(['contact.whatsapp' => 'Nomor WhatsApp harus 8–15 digit termasuk kode negara']);
         $data['contact']['whatsapp'] = $wa;
         foreach (['contact', 'social', 'brand'] as $k) {
-<<<<<<< HEAD
             Setting::updateOrCreate(['key' => $k], ['value' => array_map(fn ($v) => $v ?? '', $data[$k] ?? [])]);
         }
         return back()->with('status', 'Kontak dan identitas website berhasil disimpan');
-=======
-            Setting::updateOrCreate(['key' => $k], ['value' => array_map(fn ($v) => $v ?? '', $data[$k])]);
-        }
-        return back()->with('status', 'Pengaturan website disimpan.');
->>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
     }
 
     public function content()
     {
-<<<<<<< HEAD
         return view('admin.content', [
             'blocks' => site('blocks'),
             'defaults' => config('site.blocks'),
             'texts' => site('texts', []),
             'catalog' => CmsText::catalog(),
         ]);
-=======
-        $blocks = site('blocks');
-        return view('admin.content', ['blocks' => $blocks]);
->>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
     }
 
     public function updateContent(Request $r)
     {
-<<<<<<< HEAD
         $texts = json_decode((string) $r->input('texts', '{}'), true);
         $blocks = json_decode((string) $r->input('blocks', '{}'), true);
         if (!is_array($texts) || !is_array($blocks)) {
@@ -125,35 +102,6 @@ class AdminController extends Controller
         Setting::updateOrCreate(['key' => 'texts'], ['value' => array_filter($texts, fn ($v) => is_string($v))]);
         Setting::updateOrCreate(['key' => 'blocks'], ['value' => $blocks]);
         return back()->with('status', 'Konten website berhasil disimpan');
-=======
-        $key = $r->input('block');
-        $defaults = config('site.blocks');
-        abort_unless(isset($defaults[$key]), 404);
-        $raw = trim((string) $r->input('value'));
-        $decoded = json_decode($raw, true);
-        if (json_last_error() !== JSON_ERROR_NONE || (!is_array($decoded))) {
-            throw ValidationException::withMessages(['value' => 'JSON tidak valid: ' . json_last_error_msg()]);
-        }
-        $row = Setting::firstOrNew(['key' => 'blocks']);
-        $blocks = $row->value ?? [];
-        $blocks[$key] = $decoded;
-        $row->value = $blocks;
-        $row->save();
-        return redirect()->route('admin.content', ['block' => $key])->with('status', "Bagian \"$key\" disimpan.");
-    }
-
-    public function resetContent(Request $r)
-    {
-        $key = $r->input('block');
-        $row = Setting::find('blocks');
-        if ($row) {
-            $blocks = $row->value ?? [];
-            unset($blocks[$key]);
-            $row->value = $blocks;
-            $row->save();
-        }
-        return redirect()->route('admin.content', ['block' => $key])->with('status', "Bagian \"$key\" dikembalikan ke default.");
->>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
     }
 
     public function upload(Request $r)

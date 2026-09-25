@@ -12,7 +12,6 @@ php artisan storage:link         # untuk upload gambar (storage/app/public)
 php artisan serve
 ```
 
-<<<<<<< HEAD
 ## Deploy ke Railway (Dockerfile)
 Repo ini sudah berisi `Dockerfile`, `docker/entrypoint.sh`, `.dockerignore`, dan `railway.json` (builder Dockerfile, healthcheck `/up`).
 
@@ -49,9 +48,6 @@ Repo ini sudah berisi `Dockerfile`, `docker/entrypoint.sh`, `.dockerignore`, dan
 > Catatan: filesystem Railway bersifat ephemeral. Agar gambar yang di-upload dari admin tidak hilang saat redeploy, tambahkan **Volume** dan mount ke `/var/www/html/storage/app/public`.
 
 
-=======
-## Struktur
->>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
 - `app/Http/Controllers/SiteController.php` — halaman publik, booking (`POST /booking`), newsletter.
 - `app/Http/Controllers/Admin/*` — login, dashboard, CRUD konten generik (`config/resources.php`), bookings, pengaturan, konten blok, akun, upload.
 - `config/site.php` — konten default website (kontak, brand, blok teks/gambar) yang bisa di-override dari admin (tabel `settings`).
