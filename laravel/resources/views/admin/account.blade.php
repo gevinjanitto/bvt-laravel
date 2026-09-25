@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('title', 'Akun Admin')
 @section('content')
+<<<<<<< HEAD
 @php($opts = [5 => '5 menit', 10 => '10 menit', 15 => '15 menit (bawaan)', 30 => '30 menit', 60 => '1 jam', 120 => '2 jam', 0 => 'Nonaktif (tidak pernah logout otomatis)'])
 @php($saved = (int) $user->idle_timeout_minutes)
 <div class="max-w-2xl space-y-10" data-testid="account-page">
@@ -27,5 +28,21 @@
     <div class="space-y-2 max-w-sm"><label for="idle-timeout" class="ui-label">Durasi tanpa aktivitas</label><select id="idle-timeout" x-model="value" class="ui-select bg-cream/60" data-testid="idle-timeout-select">@foreach($opts as $v => $l)<option value="{{ $v }}" data-testid="idle-timeout-option-{{ $v }}">{{ $l }}</option>@endforeach</select></div>
     <div class="flex items-center justify-between gap-4 pt-2 border-t border-ink/[0.08]"><span class="text-xs text-sand" data-testid="idle-settings-current">Saat ini: <strong class="text-ink" x-text="labels[saved] || (saved + ' menit')"></strong></span><button type="submit" :disabled="busy || Number(value) === saved" class="btn-brand !py-2.5 !px-5 disabled:opacity-60" data-testid="idle-settings-save">{!! icon('Save') !!} <span x-text="busy ? 'Menyimpan…' : 'Simpan durasi'"></span></button></div>
   </form>
+=======
+<div data-testid="admin-account" class="grid lg:grid-cols-2 gap-5">
+<form method="post" action="{{ route('admin.account.update') }}" class="card space-y-4">@csrf @method('PUT')
+  <h1 class="text-xl font-bold">Akun Admin</h1><p class="text-sm text-sand">Ubah username atau password. Anda akan diminta login ulang setelah menyimpan.</p>
+  <div><label class="label">Username</label><input name="username" value="{{ old('username', $user->username) }}" class="input" data-testid="account-username"></div>
+  <div><label class="label">Password saat ini</label><input type="password" name="current_password" class="input" required data-testid="account-current-password"></div>
+  <div><label class="label">Password baru (opsional, min. 8)</label><input type="password" name="new_password" class="input" data-testid="account-new-password"></div>
+  <div><label class="label">Konfirmasi password baru</label><input type="password" name="new_password_confirmation" class="input" data-testid="account-new-password-confirm"></div>
+  <button class="btn-primary" data-testid="account-save">Simpan akun</button>
+</form>
+<form method="post" action="{{ route('admin.preferences.update') }}" class="card space-y-4 self-start">@csrf @method('PUT')
+  <h2 class="text-xl font-bold">Logout Otomatis</h2><p class="text-sm text-sand">Durasi tanpa aktivitas sebelum sesi admin keluar otomatis.</p>
+  <select name="idle_timeout_minutes" class="input" data-testid="idle-timeout">@foreach([0 => 'Nonaktif', 5 => '5 menit', 10 => '10 menit', 15 => '15 menit', 30 => '30 menit', 60 => '1 jam', 120 => '2 jam'] as $v => $l)<option value="{{ $v }}" @selected($user->idle_timeout_minutes == $v)>{{ $l }}</option>@endforeach</select>
+  <button class="btn-secondary" data-testid="idle-save">Simpan durasi</button>
+</form>
+>>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
 </div>
 @endsection

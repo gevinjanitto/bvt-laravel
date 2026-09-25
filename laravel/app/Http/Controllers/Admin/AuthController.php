@@ -63,14 +63,21 @@ class AuthController extends Controller
         }
         $user->save();
         Auth::logout();
+<<<<<<< HEAD
         return redirect()->route('admin.login')->with('status', 'Akun berhasil diperbarui. Masuk dengan akun baru Anda.');
+=======
+        return redirect()->route('admin.login')->with('status', 'Akun diperbarui. Silakan masuk kembali.');
+>>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
     }
 
     public function updatePreferences(Request $r)
     {
         $data = $r->validate(['idle_timeout_minutes' => 'required|integer|in:0,5,10,15,30,60,120']);
         User::whereKey(Auth::id())->update($data);
+<<<<<<< HEAD
         if ($r->wantsJson()) return response()->json($data);
+=======
+>>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
         return back()->with('status', 'Durasi logout otomatis disimpan.');
     }
 }

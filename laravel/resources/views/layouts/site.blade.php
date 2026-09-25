@@ -41,6 +41,7 @@ img { max-width:100%; }
 .lift { transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s cubic-bezier(.2,.8,.2,1); } .lift:hover { transform:translateY(-6px); box-shadow:0 24px 48px -16px rgba(30,45,39,.22); }
 .img-zoom img { transition:transform .7s cubic-bezier(.2,.8,.2,1); } .img-zoom:hover img { transform:scale(1.06); }
 @keyframes marquee { from { transform:translateX(0);} to { transform:translateX(-50%);} } .marquee-slow { animation:marquee 55s linear infinite; } .marquee-slow:hover { animation-play-state:paused; }
+<<<<<<< HEAD
 @keyframes pre-logo { from { transform:scale(.6) rotate(-20deg); opacity:0; } to { transform:scale(1) rotate(0); opacity:1; } }
 @keyframes pre-up { from { transform:translateY(110%); } to { transform:translateY(0); } }
 @keyframes pre-bar { from { transform:translateX(-100%); } to { transform:translateX(0); } }
@@ -49,6 +50,8 @@ img { max-width:100%; }
 #preloader .pre-logo { animation:pre-logo .7s cubic-bezier(.22,1,.36,1) both; }
 #preloader .pre-brand { animation:pre-up .7s .2s cubic-bezier(.22,1,.36,1) both; }
 #preloader .pre-bar { animation:pre-bar .9s ease-in-out both; }
+=======
+>>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
 @keyframes pulse-dot { 0%,100% { transform:scale(1); opacity:1;} 50% { transform:scale(1.6); opacity:.5;} } .pulse-dot { animation:pulse-dot 1.8s ease-in-out infinite; }
 @keyframes rise { from { opacity:0; transform:translateY(24px);} to { opacity:1; transform:translateY(0);} } .reveal { animation:rise .8s cubic-bezier(.22,1,.36,1) both; }
 .clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
@@ -66,6 +69,7 @@ img { max-width:100%; }
 <body class="min-h-screen flex flex-col pb-[66px] md:pb-0" x-data="{ scrolled: false }" @scroll.window="scrolled = window.scrollY > 12">
 @php($nav = blocks('navigation'))
 @php($brand = site('brand'))
+<<<<<<< HEAD
 <div id="preloader" class="grain" data-testid="preloader">
   <div class="relative z-10 flex flex-col items-center">
     <img src="{{ $brand['logoLight'] ?: ($brand['logo'] ?: '/logo-icon.png') }}" alt="{{ $brand['name'] }}" data-testid="preloader-logo" class="pre-logo w-32 h-16 object-contain">
@@ -74,6 +78,8 @@ img { max-width:100%; }
   </div>
 </div>
 <script>(function(){var p=document.getElementById('preloader'),t0=Date.now(),done=false;function fin(){if(done)return;done=true;var w=Math.max(0,900-(Date.now()-t0));setTimeout(function(){p.classList.add('is-done');setTimeout(function(){p.remove();},850);},w);}window.addEventListener('load',fin);setTimeout(fin,3500);})();</script>
+=======
+>>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
 <header class="sticky top-0 z-50 transition-colors duration-300" :class="scrolled ? 'bg-cream/85 backdrop-blur-md border-b border-ink/5 shadow-soft' : 'bg-cream/70 backdrop-blur'" data-testid="navbar">
   <div class="hidden md:flex mx-auto max-w-7xl items-center justify-between px-6 lg:px-10 h-[72px]">
     <x-logo />

@@ -12,8 +12,11 @@ function site(?string $key = null, $default = null)
             foreach (Setting::all() as $row) {
                 if ($row->key === 'blocks') {
                     $cache['blocks'] = array_replace($cache['blocks'], $row->value ?? []);
+<<<<<<< HEAD
                 } elseif ($row->key === 'texts') {
                     $cache['texts'] = is_array($row->value) ? $row->value : [];
+=======
+>>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
                 } elseif (isset($cache[$row->key]) && is_array($row->value)) {
                     $cache[$row->key] = array_replace($cache[$row->key], array_filter($row->value, fn ($v) => $v !== null));
                 }
@@ -29,6 +32,7 @@ function blocks(string $key, $default = [])
     return site("blocks.$key", $default);
 }
 
+<<<<<<< HEAD
 function cms_text(string $key, string $default): string
 {
     $texts = site('texts', []);
@@ -58,6 +62,8 @@ function fa_icon(string $name, string $class = 'w-4 h-4'): string
     return '<svg viewBox="0 0 ' . $w . ' 512" class="' . e($class) . ' fill-current" aria-hidden="true"><path d="' . $d . '"/></svg>';
 }
 
+=======
+>>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
 function img(string $key): string
 {
     return site("blocks.images.$key", '');

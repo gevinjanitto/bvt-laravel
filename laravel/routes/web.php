@@ -34,6 +34,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('settings', [AdminController::class, 'updateSettings'])->name('settings.update');
         Route::get('content', [AdminController::class, 'content'])->name('content');
         Route::put('content', [AdminController::class, 'updateContent'])->name('content.update');
+<<<<<<< HEAD
+=======
+        Route::post('content/reset', [AdminController::class, 'resetContent'])->name('content.reset');
+>>>>>>> 3d75822977b8fa74ecaa4dc0a07e5dc1508a4a17
         Route::get('account', [AuthController::class, 'account'])->name('account');
         Route::put('account', [AuthController::class, 'updateAccount'])->name('account.update');
         Route::put('preferences', [AuthController::class, 'updatePreferences'])->name('preferences.update');
