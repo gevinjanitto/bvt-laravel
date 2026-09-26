@@ -1,0 +1,3 @@
+@props(['tone' => 'brand', 'uppercase' => false])
+@php($tones = ['brand' => 'bg-brand text-white', 'brand-soft' => 'bg-brand-50 text-brand-700', 'forest' => 'bg-forest text-white', 'sage' => 'bg-sage text-sage-700', 'gold' => 'bg-gold text-white', 'sand' => 'bg-cream-200 text-sand', 'glass' => 'bg-white/20 backdrop-blur text-white border border-white/30', 'white' => 'bg-white text-ink', 'dark' => 'bg-ink/80 backdrop-blur text-white'])
+<span {{ $attributes->merge(['class' => 'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold ' . ($uppercase ? 'uppercase tracking-[0.12em] text-[10px] ' : '') . ($tones[$tone] ?? $tones['brand'])]) }}>{{ $slot }}</span>
