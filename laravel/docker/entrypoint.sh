@@ -23,10 +23,13 @@ if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
 fi
 
 chown -R www-data:www-data storage bootstrap/cache
+<<<<<<< HEAD
 
 # Pastikan hanya satu MPM aktif (mod_php membutuhkan mpm_prefork)
 rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.*
 a2enmod -q mpm_prefork || true
 apache2ctl -t
 
+=======
+>>>>>>> cc3625a21d58469944ed2bc96649c5cbbd81f861
 exec apache2-foreground

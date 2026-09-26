@@ -12,10 +12,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libzip-dev libicu-dev libonig-dev unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j"$(nproc)" pdo_mysql mbstring zip gd intl bcmath opcache exif \
+<<<<<<< HEAD
     && (a2dismod mpm_event mpm_worker || true) \
     && rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* \
     && a2enmod mpm_prefork rewrite headers \
     && apache2ctl -t \
+=======
+    && a2enmod rewrite headers \
+>>>>>>> cc3625a21d58469944ed2bc96649c5cbbd81f861
     && rm -rf /var/lib/apt/lists/*
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
@@ -31,8 +35,12 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
     && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf \
+<<<<<<< HEAD
     && sed -ri -e 's!AllowOverride None!AllowOverride All!g' /etc/apache2/apache2.conf \
     && apache2ctl -t
+=======
+    && sed -ri -e 's!AllowOverride None!AllowOverride All!g' /etc/apache2/apache2.conf
+>>>>>>> cc3625a21d58469944ed2bc96649c5cbbd81f861
 
 WORKDIR /var/www/html
 COPY --from=vendor --chown=www-data:www-data /app /var/www/html
